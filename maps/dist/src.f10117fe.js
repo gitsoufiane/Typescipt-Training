@@ -100438,6 +100438,10 @@ function () {
     };
   }
 
+  Company.prototype.markerContent = function () {
+    return "Company name : " + this.companyName;
+  };
+
   return Company;
 }();
 
@@ -100469,11 +100473,58 @@ function () {
     };
   }
 
+  User.prototype.markerContent = function () {
+    return "User name : " + this.name;
+  };
+
   return User;
 }();
 
 exports.User = User;
-},{"faker":"node_modules/faker/index.js"}],"src/index.ts":[function(require,module,exports) {
+},{"faker":"node_modules/faker/index.js"}],"src/Map.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Map = void 0;
+
+var Map =
+/** @class */
+function () {
+  function Map(elemId) {
+    this.googleMap = new google.maps.Map(document.getElementById(elemId), {
+      zoom: 1,
+      center: {
+        lat: 0,
+        lng: 0
+      }
+    });
+  }
+
+  Map.prototype.addMarker = function (mappable) {
+    var _this = this;
+
+    var marker = new google.maps.Marker({
+      map: this.googleMap,
+      position: {
+        lat: mappable.location.lat,
+        lng: mappable.location.lng
+      }
+    });
+    marker.addListener('click', function () {
+      var infoWindow = new google.maps.InfoWindow({
+        content: mappable.markerContent()
+      });
+      infoWindow.open(_this.googleMap, marker);
+    });
+  };
+
+  return Map;
+}();
+
+exports.Map = Map;
+},{}],"src/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -100484,11 +100535,14 @@ var Company_1 = require("./Company");
 
 var User_1 = require("./User");
 
+var Map_1 = require("./Map");
+
 var user = new User_1.User();
 var company = new Company_1.Company();
-console.log(user);
-console.log(company);
-},{"./Company":"src/Company.ts","./User":"src/User.ts"}],"../../../../../../usr/local/share/.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var customMap = new Map_1.Map('map');
+customMap.addMarker(user);
+customMap.addMarker(company);
+},{"./Company":"src/Company.ts","./User":"src/User.ts","./Map":"src/Map.ts"}],"../../../../../../usr/local/share/.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -100516,7 +100570,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40241" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38995" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
