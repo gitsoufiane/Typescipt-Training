@@ -49,7 +49,6 @@ printAnything<number>([1,2,3])
 
 
 //generic constraints
-
 class Car{
   print(){
     console.log('I am a car')
@@ -69,5 +68,4 @@ function printHouseOrCar<T extends Printable>(arr:T[]):void{
   for(let i=0;i<arr.length;i++){
     arr[i].print();
   }
-
 }
